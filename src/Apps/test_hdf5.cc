@@ -4,6 +4,7 @@
  * @author mueller@fnal.gov
 */
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include "H5Cpp.h"
 #include "products.h"
@@ -68,6 +69,51 @@ int main(int argc, char const * argv[])
     std::cout << "Number of truth interactions: " << truth_interactions.size() << std::endl;
     std::vector<dlp::types::TruthParticle> truth_particles(get_product<dlp::types::TruthParticle>(file, events[event_number]));
     std::cout << "Number of truth particles: " << truth_particles.size() << std::endl;
+
+    /**
+     * @brief Print a selection of the fields added in SPINE v1.4.0 (and the
+     * truth num_primary_particles, distance_travel, crt_times) to validate
+     * that they are read in correctly.
+    */
+    for(dlp::types::RecoInteraction &in : reco_interactions)
+    {
+        in.SyncVectors();
+        std::cout << "  reco int " << in.id << ": best_match_id=" << in.best_match_id
+                  << " best_match_overlap=" << in.best_match_overlap
+                  << " depositions_q_sum=" << in.depositions_q_sum
+                  << " dir=(" << in.dir[0] << ", " << in.dir[1] << ", " << in.dir[2] << ")"
+                  << " n_flash_hypothesis_ids=" << std::distance(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end())
+                  << std::endl;
+    }
+    for(dlp::types::RecoParticle &p : reco_particles)
+    {
+        std::cout << "  reco part " << p.id << ": best_match_id=" << p.best_match_id
+                  << " best_match_overlap=" << p.best_match_overlap
+                  << " depositions_q_sum=" << p.depositions_q_sum << std::endl;
+    }
+    for(dlp::types::TruthInteraction &in : truth_interactions)
+    {
+        in.SyncVectors();
+        std::cout << "  truth int " << in.id << ": best_match_id=" << in.best_match_id
+                  << " best_match_overlap=" << in.best_match_overlap
+                  << " num_primary_particles=" << in.num_primary_particles
+                  << " time=" << in.time
+                  << " distance_travel=" << in.distance_travel
+                  << " dir=(" << in.dir[0] << ", " << in.dir[1] << ", " << in.dir[2] << ")"
+                  << " reco_dir=(" << in.reco_dir[0] << ", " << in.reco_dir[1] << ", " << in.reco_dir[2] << ")"
+                  << " n_flash_hypothesis_ids=" << std::distance(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end())
+                  << " n_crt_times=" << std::distance(in.crt_times.begin(), in.crt_times.end())
+                  << std::endl;
+    }
+    for(dlp::types::TruthParticle &p : truth_particles)
+    {
+        std::cout << "  truth part " << p.id << ": best_match_id=" << p.best_match_id
+                  << " best_match_overlap=" << p.best_match_overlap
+                  << " chi2_pid=" << p.chi2_pid
+                  << " chi2_per_pid[0]=" << p.chi2_per_pid[0]
+                  << " first_step_t=" << p.first_step_t
+                  << " last_step_t=" << p.last_step_t << std::endl;
+    }
 
     /**
      * @brief Close the input file.

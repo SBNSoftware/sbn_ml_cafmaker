@@ -20,6 +20,7 @@ namespace dlp::types
         crt_ids.reset(&crt_ids_handle);
         crt_scores.reset(&crt_scores_handle);
         crt_times.reset(&crt_times_handle);
+        flash_hypothesis_ids.reset(&flash_hypothesis_ids_handle);
         flash_ids.reset(&flash_ids_handle);
         flash_scores.reset(&flash_scores_handle);
         flash_times.reset(&flash_times_handle);
@@ -55,12 +56,17 @@ namespace dlp::types
         H5::EnumType bool_enumtype(create_bool_enumtype());
 
         // Add the members of the RecoInteraction to the compound type.
+        ctype.insertMember("best_match_id", HOFFSET(RecoInteraction, best_match_id), H5::PredType::STD_I64LE);
+        ctype.insertMember("best_match_overlap", HOFFSET(RecoInteraction, best_match_overlap), H5::PredType::IEEE_F64LE);
         ctype.insertMember("cathode_offset", HOFFSET(RecoInteraction, cathode_offset), H5::PredType::IEEE_F64LE);
         ctype.insertMember("crt_ids", HOFFSET(RecoInteraction, crt_ids_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("crt_scores", HOFFSET(RecoInteraction, crt_scores_handle), H5::VarLenType(H5::PredType::IEEE_F32LE));
         ctype.insertMember("crt_times", HOFFSET(RecoInteraction, crt_times_handle), H5::VarLenType(H5::PredType::IEEE_F32LE));
+        ctype.insertMember("depositions_q_sum", HOFFSET(RecoInteraction, depositions_q_sum), H5::PredType::IEEE_F64LE);
 	    ctype.insertMember("depositions_sum", HOFFSET(RecoInteraction, depositions_sum), H5::PredType::IEEE_F64LE);
+        ctype.insertMember("dir", HOFFSET(RecoInteraction, dir), H5::ArrayType(H5::PredType::IEEE_F32LE, 1, &std::array<hsize_t, 1>{3}[0]));
         ctype.insertMember("flash_hypo_pe", HOFFSET(RecoInteraction, flash_hypo_pe), H5::PredType::IEEE_F64LE);
+        ctype.insertMember("flash_hypothesis_ids", HOFFSET(RecoInteraction, flash_hypothesis_ids_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("flash_ids", HOFFSET(RecoInteraction, flash_ids_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("flash_scores", HOFFSET(RecoInteraction, flash_scores_handle), H5::VarLenType(H5::PredType::IEEE_F32LE));
         ctype.insertMember("flash_times", HOFFSET(RecoInteraction, flash_times_handle), H5::VarLenType(H5::PredType::IEEE_F32LE));

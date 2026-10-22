@@ -37,8 +37,12 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     std::copy(std::begin(p.ancestor_position), std::end(p.ancestor_position), std::begin(part.ancestor_position));
     part.ancestor_t = p.ancestor_t;
     part.ancestor_track_id = p.ancestor_track_id;
+    part.best_match_id = p.best_match_id;
+    part.best_match_overlap = p.best_match_overlap;
     part.calo_ke = p.calo_ke;
     part.cathode_offset = p.cathode_offset;
+    std::copy(std::begin(p.chi2_per_pid), std::end(p.chi2_per_pid), std::begin(part.chi2_per_pid));
+    part.chi2_pid = p.chi2_pid;
     part.children_counts = std::vector<int64_t>(p.children_counts.begin(), p.children_counts.end());
     part.children_id = std::vector<int64_t>(p.children_id.begin(), p.children_id.end());
     part.creation_process = p.creation_process;
@@ -59,6 +63,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.energy_deposit = p.energy_deposit;
     part.energy_init = p.energy_init;
     std::copy(std::begin(p.first_step), std::end(p.first_step), std::begin(part.first_step));
+    part.first_step_t = p.first_step_t;
     part.fragment_ids = std::vector<int32_t>(p.fragment_ids.begin(), p.fragment_ids.end());
     part.group_id = p.group_id;
     part.group_primary = p.group_primary;
@@ -74,6 +79,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.is_valid = p.is_valid;
     part.ke = p.ke;
     std::copy(std::begin(p.last_step), std::end(p.last_step), std::begin(part.last_step));
+    part.last_step_t = p.last_step_t;
     part.length = p.length;
     part.mass = p.mass;
     part.match_ids = std::vector<int64_t>(p.match_ids.begin(), p.match_ids.end());
@@ -129,12 +135,15 @@ caf::SRParticleDLP fill_particle(dlp::types::RecoParticle &p, uint64_t offset)
 
     caf::SRParticleDLP part;
     part.axial_spread = p.axial_spread;
+    part.best_match_id = p.best_match_id;
+    part.best_match_overlap = p.best_match_overlap;
     part.calo_ke = p.calo_ke;
     part.cathode_offset = p.cathode_offset;
     std::copy(std::begin(p.chi2_per_pid), std::end(p.chi2_per_pid), std::begin(part.chi2_per_pid));
     part.chi2_pid = (int64_t)p.chi2_pid;
     part.csda_ke = p.csda_ke;
     std::copy(std::begin(p.csda_ke_per_pid), std::end(p.csda_ke_per_pid), std::begin(part.csda_ke_per_pid));
+    part.depositions_q_sum = p.depositions_q_sum;
     part.depositions_sum = p.depositions_sum;
     part.directional_spread = p.directional_spread;
     std::copy(std::begin(p.end_dir), std::end(p.end_dir), std::begin(part.end_dir));
@@ -178,6 +187,7 @@ caf::SRParticleDLP fill_particle(dlp::types::RecoParticle &p, uint64_t offset)
 
 caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &in, std::vector<caf::SRParticleTruthDLP> &particles, uint64_t offset)
 {
+    in.flash_hypothesis_ids.reset(&in.flash_hypothesis_ids_handle);
     in.flash_ids.reset(&in.flash_ids_handle);
     in.flash_scores.reset(&in.flash_scores_handle);
     in.flash_times.reset(&in.flash_times_handle);
@@ -189,6 +199,8 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     in.primary_particle_ids.reset(&in.primary_particle_ids_handle);
 
     caf::SRInteractionTruthDLP ret;
+    ret.best_match_id = in.best_match_id;
+    ret.best_match_overlap = in.best_match_overlap;
     ret.bjorken_x = in.bjorken_x;
     ret.cathode_offset = in.cathode_offset;
     ret.creation_process = in.creation_process;
@@ -198,10 +210,12 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.depositions_g4_sum = in.depositions_g4_sum;
     ret.depositions_q_sum = in.depositions_q_sum;
     ret.depositions_sum = in.depositions_sum;
+    std::copy(std::begin(in.dir), std::end(in.dir), std::begin(ret.dir));
     ret.distance_travel = in.distance_travel;
     ret.energy_init = in.energy_init;
     ret.energy_transfer = in.energy_transfer;
     ret.flash_hypo_pe = in.flash_hypo_pe;
+    ret.flash_hypothesis_ids = std::vector<int64_t>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
     ret.flash_ids = std::vector<int64_t>(in.flash_ids.begin(), in.flash_ids.end());
     ret.flash_scores = std::vector<float>(in.flash_scores.begin(), in.flash_scores.end());
     ret.flash_times = std::vector<float>(in.flash_times.begin(), in.flash_times.end());
@@ -241,12 +255,14 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     std::copy(std::begin(in.primary_particle_counts), std::end(in.primary_particle_counts), std::begin(ret.primary_particle_counts));
     ret.primary_particle_ids = std::vector<int64_t>(in.primary_particle_ids.begin(), in.primary_particle_ids.end());
     ret.quark = in.quark;
+    std::copy(std::begin(in.reco_dir), std::end(in.reco_dir), std::begin(ret.reco_dir));
     std::copy(std::begin(in.reco_vertex), std::end(in.reco_vertex), std::begin(ret.reco_vertex));
     ret.size = in.size;
     ret.size_adapt = in.size_adapt;
     ret.size_g4 = in.size_g4;
     ret.target = in.target;
     ret.theta = in.theta;
+    ret.time = in.time;
     ret.topology = in.topology;
     ret.track_id = in.track_id;
     std::copy(std::begin(in.vertex), std::end(in.vertex), std::begin(ret.vertex));
@@ -258,6 +274,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
 
 caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vector<caf::SRParticleDLP> &particles, uint64_t offset)
 {
+    in.flash_hypothesis_ids.reset(&in.flash_hypothesis_ids_handle);
     in.flash_ids.reset(&in.flash_ids_handle);
     in.flash_scores.reset(&in.flash_scores_handle);
     in.flash_times.reset(&in.flash_times_handle);
@@ -269,9 +286,14 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     in.primary_particle_ids.reset(&in.primary_particle_ids_handle);
 
     caf::SRInteractionDLP ret;
+    ret.best_match_id = in.best_match_id;
+    ret.best_match_overlap = in.best_match_overlap;
     ret.cathode_offset = in.cathode_offset;
+    ret.depositions_q_sum = in.depositions_q_sum;
     ret.depositions_sum = in.depositions_sum;
+    std::copy(std::begin(in.dir), std::end(in.dir), std::begin(ret.dir));
     ret.flash_hypo_pe = in.flash_hypo_pe;
+    ret.flash_hypothesis_ids = std::vector<int64_t>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
     ret.flash_ids = std::vector<int64_t>(in.flash_ids.begin(), in.flash_ids.end());
     ret.flash_scores = std::vector<float>(in.flash_scores.begin(), in.flash_scores.end());
     ret.flash_times = std::vector<float>(in.flash_times.begin(), in.flash_times.end());

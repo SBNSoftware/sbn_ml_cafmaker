@@ -23,22 +23,26 @@ namespace dlp::types
      */
     struct TruthInteraction
     {
+        int64_t best_match_id;                              //!< ID of the highest-overlap matched reco interaction (-1 if unmatched).
+        double best_match_overlap;                          //!< Overlap with the highest-overlap matched reco interaction.
         double bjorken_x;                                   //!< Bjorken x of the neutrino interaction.
         double cathode_offset;                              //!< Distance from the cathode.
         std::string creation_process;                       //!< Creation process of the neutrino.
         BufferView<int32_t> crt_ids;                        //!< CRT IDs associated with the interaction.
         BufferView<float> crt_scores;                       //!< CRT scores associated with the interaction.
-        BufferView<int32_t> crt_times;                      //!< CRT times associated with the interaction.
+        BufferView<float> crt_times;                        //!< CRT times associated with the interaction.
         CurrentType current_type;                           //!< Current type of the neutrino.
         double depositions_adapt_q_sum;                     //!< Total tagged (reco non-ghost) charge deposited [ADC].
         double depositions_adapt_sum;                       //!< Total tagged (reco non-ghost) energy deposited [MeV].
         double depositions_g4_sum;                          //!< Total energy deposited energy at the G4 level [MeV].
         double depositions_q_sum;                           //!< Total tagged (true non-ghost) charge deposited [ADC].
         double depositions_sum;                             //!< Total tagged (true non-ghost) energy deposited [MeV].
-        float distance_travel;                              //!< Distance traveled by the neutrino from production to the interaction.
+        float dir[3];                                       //!< Direction of the neutrino at its interaction point.
+        double distance_travel;                             //!< Distance traveled by the neutrino from production to the interaction.
         double energy_init;                                 //!< Initial energy of the neutrino.
         double energy_transfer;                             //!< Energy transfer (Q0) of the neutrino interaction.
         double flash_hypo_pe;                               //!< Total PE of the hypothesized flash.
+        BufferView<int32_t> flash_hypothesis_ids;           //!< Indices of the optical flash hypotheses associated with the interaction.
         BufferView<int32_t> flash_ids;                      //!< Flash ID for the matched flashes.
         BufferView<float> flash_scores;                     //!< Flash score for the matched flashes.
         BufferView<float> flash_times;                      //!< Time of the matched flashes.
@@ -85,6 +89,7 @@ namespace dlp::types
         int32_t primary_particle_counts[6];                 //!< Number of primary particles of each type in the interaction.
         BufferView<int32_t> primary_particle_ids;           //!< Particle IDs of the primary particles in the interaction.
         int64_t quark;                                      //!< Quark in the neutrino interaction.
+        float reco_dir[3];                                  //!< Reconstructed direction of the interaction.
         float reco_vertex[3];                               //!< Vertex of the interaction in detector coordinates (reco).
         int64_t size;                                       //!< Number of true non-ghost true-tagged space points.
         int64_t size_adapt;                                 //!< Number of reco non-ghost true-tagged space points.
@@ -92,6 +97,7 @@ namespace dlp::types
         double t;                                           //!< Time of the interaction.
         int64_t target;                                     //!< Target in the neutrino interaction.
         double theta;                                       //!< Angle of the neutrino interaction.
+        double time;                                        //!< Interaction time [ns] (neutrino time if available, else earliest particle time).
         std::string topology;                               //!< Topology of the interaction (e.g. "0g0e1mu0pi2p") considering only primaries.
         int64_t track_id;                                   //!< Track ID of the neutrino interaction.
         std::string units;                                  //!< Units in which the position coordinates are expressed.
@@ -109,6 +115,7 @@ namespace dlp::types
         void SyncVectors();
 
         hvl_t flash_ids_handle;
+        hvl_t flash_hypothesis_ids_handle;
         hvl_t flash_scores_handle;
         hvl_t flash_times_handle;
         hvl_t flash_volume_ids_handle;

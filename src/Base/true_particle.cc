@@ -61,8 +61,12 @@ namespace dlp::types
         ctype.insertMember("ancestor_position", HOFFSET(TruthParticle, ancestor_position), H5::ArrayType(H5::PredType::IEEE_F32LE,  1, &std::array<hsize_t, 1>{3}[0]));
         ctype.insertMember("ancestor_t", HOFFSET(TruthParticle, ancestor_t), H5::PredType::IEEE_F64LE);
         ctype.insertMember("ancestor_track_id", HOFFSET(TruthParticle, ancestor_track_id), H5::PredType::STD_I64LE);
+        ctype.insertMember("best_match_id", HOFFSET(TruthParticle, best_match_id), H5::PredType::STD_I64LE);
+        ctype.insertMember("best_match_overlap", HOFFSET(TruthParticle, best_match_overlap), H5::PredType::IEEE_F64LE);
         ctype.insertMember("calo_ke", HOFFSET(TruthParticle, calo_ke), H5::PredType::IEEE_F32LE);
         ctype.insertMember("cathode_offset", HOFFSET(TruthParticle, cathode_offset), H5::PredType::IEEE_F64LE);
+        ctype.insertMember("chi2_per_pid", HOFFSET(TruthParticle, chi2_per_pid), H5::ArrayType(H5::PredType::IEEE_F32LE, 1, &std::array<hsize_t, 1>{6}[0]));
+        ctype.insertMember("chi2_pid", HOFFSET(TruthParticle, chi2_pid), H5::PredType::STD_I64LE);
         ctype.insertMember("children_counts", HOFFSET(TruthParticle, children_counts_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("children_id", HOFFSET(TruthParticle, children_id_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("creation_process", HOFFSET(TruthParticle, creation_process), string_type);
@@ -86,6 +90,7 @@ namespace dlp::types
         ctype.insertMember("energy_deposit", HOFFSET(TruthParticle, energy_deposit), H5::PredType::IEEE_F64LE);
         ctype.insertMember("energy_init", HOFFSET(TruthParticle, energy_init), H5::PredType::IEEE_F64LE);
         ctype.insertMember("first_step", HOFFSET(TruthParticle, first_step), H5::ArrayType(H5::PredType::IEEE_F32LE,  1, &std::array<hsize_t, 1>{3}[0]));
+        ctype.insertMember("first_step_t", HOFFSET(TruthParticle, first_step_t), H5::PredType::IEEE_F64LE);
         ctype.insertMember("fragment_ids", HOFFSET(TruthParticle, fragment_ids_handle), H5::VarLenType(H5::PredType::STD_I32LE));
         ctype.insertMember("group_id", HOFFSET(TruthParticle, group_id), H5::PredType::STD_I64LE);
         ctype.insertMember("group_primary", HOFFSET(TruthParticle, group_primary), H5::PredType::STD_I64LE);
@@ -105,6 +110,7 @@ namespace dlp::types
         ctype.insertMember("is_valid", HOFFSET(TruthParticle, is_valid), bool_enumtype);
         ctype.insertMember("ke", HOFFSET(TruthParticle, ke), H5::PredType::IEEE_F32LE);
         ctype.insertMember("last_step", HOFFSET(TruthParticle, last_step), H5::ArrayType(H5::PredType::IEEE_F32LE,  1, &std::array<hsize_t, 1>{3}[0]));
+        ctype.insertMember("last_step_t", HOFFSET(TruthParticle, last_step_t), H5::PredType::IEEE_F64LE);
         ctype.insertMember("length", HOFFSET(TruthParticle, length), H5::PredType::IEEE_F64LE);
 	    ctype.insertMember("mass", HOFFSET(TruthParticle, mass), H5::PredType::IEEE_F32LE);
         ctype.insertMember("match_ids", HOFFSET(TruthParticle, match_ids_handle), H5::VarLenType(H5::PredType::STD_I32LE));

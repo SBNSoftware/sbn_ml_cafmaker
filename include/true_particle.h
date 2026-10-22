@@ -26,8 +26,12 @@ namespace dlp::types
         float ancestor_position[3];                         //!< Position of the ancestor particle.
         double ancestor_t;                                  //!< Time of the ancestor particle.
         int64_t ancestor_track_id;                          //!< Track ID of the ancestor particle.
+        int64_t best_match_id;                              //!< ID of the highest-overlap matched reco particle (-1 if unmatched).
+        double best_match_overlap;                          //!< Overlap with the highest-overlap matched reco particle.
         float calo_ke;                                      //!< Calorimetric kinetic energy.
         double cathode_offset;                              //!< Distance from the cathode.
+        float chi2_per_pid[6];                              //!< Chi2 score per PID hypothesis.
+        int64_t chi2_pid;                                   //!< PID from the chi2-based PID.
         BufferView<int32_t> children_counts;                //!< Number of children of the particle.
         BufferView<int32_t> children_id;                    //!< List of particle ID of children particles.
         std::string creation_process;                       //!< Geant4 creation process of the particle.
@@ -51,6 +55,7 @@ namespace dlp::types
         double energy_deposit;                              //!< Energy deposited by the particle.
         double energy_init;                                 //!< Initial energy of the particle.
         float first_step[3];                                //!< Coordinates of the first step of the particle.
+        double first_step_t;                                //!< Time of the first energy deposition of the particle [ns].
         BufferView<int32_t> fragment_ids;                   //!< Fragment IDs comprising the particle.
         int64_t group_id;                                   //!< Group ID of the particle.
         int64_t group_primary;                              //!< Whether the particle is a primary within its group.
@@ -70,6 +75,7 @@ namespace dlp::types
         bool is_valid;                                      //!< (Whether the particle passes thresholds and counts towards topology.
         float ke;                                           //!< Kinetic energy according from best energy estimator (CSDA, calorimetric, or MCS).
         float last_step[3];                                 //!< Coordinates of the last step of the particle.
+        double last_step_t;                                 //!< Time of the last energy deposition of the particle [ns].
         double length;                                      //!< Length of the particle.
         float mass;                                         //!< TO DO.
         BufferView<int32_t> match_ids;                      //!< Match ID.

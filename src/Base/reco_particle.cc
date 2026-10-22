@@ -61,6 +61,8 @@ namespace dlp::types
 
         // Add the members of the RecoParticle to the compound type.
         ctype.insertMember("axial_spread", HOFFSET(RecoParticle, axial_spread), H5::PredType::IEEE_F64LE);
+        ctype.insertMember("best_match_id", HOFFSET(RecoParticle, best_match_id), H5::PredType::STD_I64LE);
+        ctype.insertMember("best_match_overlap", HOFFSET(RecoParticle, best_match_overlap), H5::PredType::IEEE_F64LE);
         ctype.insertMember("calo_ke", HOFFSET(RecoParticle, calo_ke), H5::PredType::IEEE_F32LE);
         ctype.insertMember("cathode_offset", HOFFSET(RecoParticle, cathode_offset), H5::PredType::IEEE_F64LE);
         ctype.insertMember("chi2_per_pid", HOFFSET(RecoParticle, chi2_per_pid), H5::ArrayType(H5::PredType::IEEE_F32LE, 1, &std::array<hsize_t, 1>{6}[0]));
@@ -70,6 +72,7 @@ namespace dlp::types
         ctype.insertMember("crt_times", HOFFSET(RecoParticle, crt_times_handle), H5::VarLenType(H5::PredType::IEEE_F32LE));
         ctype.insertMember("csda_ke", HOFFSET(RecoParticle, csda_ke), H5::PredType::IEEE_F64LE);
         ctype.insertMember("csda_ke_per_pid", HOFFSET(RecoParticle, csda_ke_per_pid), H5::ArrayType(H5::PredType::IEEE_F32LE, 1, &std::array<hsize_t, 1>{6}[0]));
+        ctype.insertMember("depositions_q_sum", HOFFSET(RecoParticle, depositions_q_sum), H5::PredType::IEEE_F64LE);
 	    ctype.insertMember("depositions_sum", HOFFSET(RecoParticle, depositions_sum), H5::PredType::IEEE_F64LE);
         ctype.insertMember("directional_spread", HOFFSET(RecoParticle, directional_spread), H5::PredType::IEEE_F64LE);
         ctype.insertMember("end_dedx", HOFFSET(RecoParticle, end_dedx), H5::PredType::IEEE_F64LE);

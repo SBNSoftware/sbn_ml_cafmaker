@@ -23,6 +23,8 @@ namespace dlp::types
     struct RecoParticle
     {
         double axial_spread;                                //!< Axial spread of the particle.
+        int64_t best_match_id;                              //!< ID of the highest-overlap matched true particle (-1 if unmatched).
+        double best_match_overlap;                          //!< Overlap with the highest-overlap matched true particle.
         float calo_ke;                                      //!< Calorimetric kinetic energy.
         double cathode_offset;                              //!< Distance from the cathode.
         float chi2_per_pid[6];                              //!< Chi2 score per PID hypothesis.
@@ -32,6 +34,7 @@ namespace dlp::types
         BufferView<float> crt_times;                        //!< CRT times associated with the particle.
         double csda_ke;                                     //!< Continuous-slowing-down-approximation kinetic energy.
         float csda_ke_per_pid[6];                           //!< CSDA kinetic energy per PID.
+        double depositions_q_sum;                           //!< Total input charge of the object [ADC].
         double depositions_sum;                             //!< Total tagged (true non-ghost) energy deposited [MeV].
         double directional_spread;                          //!< Directional spread of the particle.
         double end_dedx;                                    //!< dE/dx at the end of the particle.

@@ -195,7 +195,10 @@ namespace dlp::types
     enum class InteractionScheme : int64_t
     {
         kGenie = 1,
+        kGibuu = 2,
         kLarsoft = 0,
+        kNeut = 4,
+        kNuwro = 3,
         kUnknown = -1,
     };
 

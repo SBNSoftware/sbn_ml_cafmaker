@@ -247,7 +247,10 @@ namespace dlp::types
     {
         H5::EnumType interaction_scheme_enumtype(H5::PredType::STD_I64LE);
         interaction_scheme_enumtype.insert("GENIE", enum_ptr{1});
+        interaction_scheme_enumtype.insert("GIBUU", enum_ptr{2});
         interaction_scheme_enumtype.insert("LARSOFT", enum_ptr{0});
+        interaction_scheme_enumtype.insert("NEUT", enum_ptr{4});
+        interaction_scheme_enumtype.insert("NUWRO", enum_ptr{3});
         interaction_scheme_enumtype.insert("UNKNOWN", enum_ptr{-1});
         return interaction_scheme_enumtype;
     }

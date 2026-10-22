@@ -22,12 +22,17 @@ namespace dlp::types
      */
     struct RecoInteraction
     {
+        int64_t best_match_id;                              //!< ID of the highest-overlap matched true interaction (-1 if unmatched).
+        double best_match_overlap;                          //!< Overlap with the highest-overlap matched true interaction.
         double cathode_offset;                              //!< Distance from the cathode.
         BufferView<int32_t> crt_ids;                        //!< CRT IDs associated with the interaction.
         BufferView<float> crt_scores;                       //!< CRT scores associated with the interaction.
         BufferView<float> crt_times;                        //!< CRT times associated with the interaction.
+        double depositions_q_sum;                           //!< Total input charge of the object [ADC].
         double depositions_sum;                             //!< Total tagged (true non-ghost) energy deposited [MeV].
+        float dir[3];                                       //!< Direction of the interaction.
         double flash_hypo_pe;                               //!< Total PE of the hypothesized flash.
+        BufferView<int32_t> flash_hypothesis_ids;           //!< Indices of the optical flash hypotheses associated with the interaction.
         BufferView<int32_t> flash_ids;                      //!< Flash IDs for the matched flashes.
         BufferView<float> flash_scores;                     //!< Score of the matched flashes.
         BufferView<float> flash_times;                      //!< Time of the matched flashes
@@ -72,6 +77,7 @@ namespace dlp::types
         hvl_t crt_ids_handle;
         hvl_t crt_scores_handle;
         hvl_t crt_times_handle;
+        hvl_t flash_hypothesis_ids_handle;
         hvl_t flash_ids_handle;
         hvl_t flash_scores_handle;
         hvl_t flash_times_handle;
