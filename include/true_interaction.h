@@ -27,7 +27,7 @@ namespace dlp::types
         double best_match_overlap;                          //!< Overlap with the highest-overlap matched reco interaction.
         double bjorken_x;                                   //!< Bjorken x of the neutrino interaction.
         double cathode_offset;                              //!< Distance from the cathode.
-        std::string creation_process;                       //!< Creation process of the neutrino.
+        char * creation_process;                         //!< Creation process of the neutrino.
         BufferView<int32_t> crt_ids;                        //!< CRT IDs associated with the interaction.
         BufferView<float> crt_scores;                       //!< CRT scores associated with the interaction.
         BufferView<float> crt_times;                        //!< CRT times associated with the interaction.
@@ -98,9 +98,9 @@ namespace dlp::types
         int64_t target;                                     //!< Target in the neutrino interaction.
         double theta;                                       //!< Angle of the neutrino interaction.
         double time;                                        //!< Interaction time [ns] (neutrino time if available, else earliest particle time).
-        std::string topology;                               //!< Topology of the interaction (e.g. "0g0e1mu0pi2p") considering only primaries.
+        char * topology;                                 //!< Topology of the interaction (e.g. "0g0e1mu0pi2p") considering only primaries.
         int64_t track_id;                                   //!< Track ID of the neutrino interaction.
-        std::string units;                                  //!< Units in which the position coordinates are expressed.
+        char * units;                                    //!< Units in which the position coordinates are expressed.
         float vertex[3];                                    //!< Vertex of the interaction in detector coordinates (truth).
 
         /**

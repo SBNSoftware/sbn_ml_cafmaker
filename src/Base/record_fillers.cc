@@ -21,6 +21,18 @@
 
 #include "sbnanaobj/StandardRecord/StandardRecord.h"
 
+/**
+ * @brief Convert a variable-length HDF5 string to a std::string.
+ * @details HDF5 reads variable-length strings as (possibly null) char
+ * pointers, so they cannot be read directly into std::string members.
+ * @param s the char pointer read from the HDF5 file.
+ * @return the string, or an empty string if the pointer is null.
+ */
+static std::string h5_string(const char * s)
+{
+    return s ? std::string(s) : std::string();
+}
+
 caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64_t offset)
 {
     p.children_counts.reset(&p.children_counts_handle);
@@ -32,7 +44,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     p.orig_children_id.reset(&p.orig_children_id_handle);
 
     caf::SRParticleTruthDLP part;
-    part.ancestor_creation_process = p.ancestor_creation_process;
+    part.ancestor_creation_process = h5_string(p.ancestor_creation_process);
     part.ancestor_pdg_code = p.ancestor_pdg_code;
     std::copy(std::begin(p.ancestor_position), std::end(p.ancestor_position), std::begin(part.ancestor_position));
     part.ancestor_t = p.ancestor_t;
@@ -45,7 +57,8 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.chi2_pid = p.chi2_pid;
     part.children_counts = std::vector<int64_t>(p.children_counts.begin(), p.children_counts.end());
     part.children_id = std::vector<int64_t>(p.children_id.begin(), p.children_id.end());
-    part.creation_process = p.creation_process;
+    part.creation_process = h5_string(p.creation_process);
+
     part.csda_ke = p.csda_ke;
     std::copy(std::begin(p.csda_ke_per_pid), std::end(p.csda_ke_per_pid), std::begin(part.csda_ke_per_pid));
     part.depositions_adapt_q_sum = p.depositions_adapt_q_sum;
@@ -99,7 +112,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.orig_interaction_id = p.orig_interaction_id;
     part.orig_parent_id = p.orig_parent_id;
     part.p = p.p;
-    part.parent_creation_process = p.parent_creation_process;
+    part.parent_creation_process = h5_string(p.parent_creation_process);
     part.parent_id = p.parent_id;
     part.parent_pdg_code = p.parent_pdg_code;
     std::copy(std::begin(p.parent_position), std::end(p.parent_position), std::begin(part.parent_position));
@@ -203,7 +216,8 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.best_match_overlap = in.best_match_overlap;
     ret.bjorken_x = in.bjorken_x;
     ret.cathode_offset = in.cathode_offset;
-    ret.creation_process = in.creation_process;
+    ret.creation_process = h5_string(in.creation_process);
+
     ret.current_type = (int64_t)in.current_type;
     ret.depositions_adapt_q_sum = in.depositions_adapt_q_sum;
     ret.depositions_adapt_sum = in.depositions_adapt_sum;
@@ -263,7 +277,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.target = in.target;
     ret.theta = in.theta;
     ret.time = in.time;
-    ret.topology = in.topology;
+    ret.topology = h5_string(in.topology);
     ret.track_id = in.track_id;
     std::copy(std::begin(in.vertex), std::end(in.vertex), std::begin(ret.vertex));
     for(int64_t id : ret.particle_ids)
@@ -289,6 +303,7 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     ret.best_match_id = in.best_match_id;
     ret.best_match_overlap = in.best_match_overlap;
     ret.cathode_offset = in.cathode_offset;
+
     ret.depositions_q_sum = in.depositions_q_sum;
     ret.depositions_sum = in.depositions_sum;
     std::copy(std::begin(in.dir), std::end(in.dir), std::begin(ret.dir));
@@ -317,7 +332,7 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     std::copy(std::begin(in.primary_particle_counts), std::end(in.primary_particle_counts), std::begin(ret.primary_particle_counts));
     ret.primary_particle_ids = std::vector<int64_t>(in.primary_particle_ids.begin(), in.primary_particle_ids.end());
     ret.size = in.size;
-    ret.topology = in.topology;
+    ret.topology = h5_string(in.topology);
     std::copy(std::begin(in.vertex), std::end(in.vertex), std::begin(ret.vertex));
     for(int64_t id : ret.particle_ids)
         ret.particles.push_back(particles.at(id));

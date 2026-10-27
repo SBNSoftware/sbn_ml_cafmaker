@@ -75,7 +75,7 @@ namespace dlp::types
         float start_dir[3];                                 //!< Unit direction vector calculated at the particle start point.
         float start_point[3];                               //!< Start point (vector) of the particle.
         double start_straightness;                          //!< Straightness at the start of the particle.
-        std::string units;                                  //!< Units in which the position coordinates are expressed.
+        char * units;                                    //!< Units in which the position coordinates are expressed.
         double vertex_distance;                             //!< Distance from the vertex.
 
         /**

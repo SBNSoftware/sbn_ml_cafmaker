@@ -21,7 +21,7 @@ namespace dlp::types
     */
     struct TruthParticle
     {
-        std::string ancestor_creation_process;              //!< Geant4 creation process of the ancestor particle.
+        char * ancestor_creation_process;                //!< Geant4 creation process of the ancestor particle.
         int64_t ancestor_pdg_code;                          //!< PDG code of the ancestor particle.
         float ancestor_position[3];                         //!< Position of the ancestor particle.
         double ancestor_t;                                  //!< Time of the ancestor particle.
@@ -34,7 +34,7 @@ namespace dlp::types
         int64_t chi2_pid;                                   //!< PID from the chi2-based PID.
         BufferView<int32_t> children_counts;                //!< Number of children of the particle.
         BufferView<int32_t> children_id;                    //!< List of particle ID of children particles.
-        std::string creation_process;                       //!< Geant4 creation process of the particle.
+        char * creation_process;                         //!< Geant4 creation process of the particle.
         BufferView<int32_t> crt_ids;                        //!< CRT IDs associated with the particle.
         BufferView<float> crt_scores;                       //!< CRT scores associated with the particle.
         BufferView<float> crt_times;                        //!< CRT times associated with the particle.
@@ -96,7 +96,7 @@ namespace dlp::types
         int64_t orig_interaction_id;                        //!< Interaction ID as it was stored in the parent LArCV file under the interaction_id attribute.
         int64_t orig_parent_id;                             //!< Parent ID as it was stored in the parent LArCV file under the parent_id attribute.
         double p;                                           //!< Momentum magnitude.
-        std::string parent_creation_process;                //!< Geant4 creation process of the parent particle.
+        char * parent_creation_process;                  //!< Geant4 creation process of the parent particle.
         int64_t parent_id;                                  //!< Parent particle ID.
         int64_t parent_pdg_code;                            //!< PDG code of the parent particle.
         float parent_position[3];                           //!< Position of the parent particle.
@@ -118,7 +118,7 @@ namespace dlp::types
         float start_point[3];                               //!< Start point (vector) of the particle.
         double t;                                           //!< Time of the particle.
         int64_t track_id;                                   //!< Track ID of the particle.
-        std::string units;                                  //!< Units in which the position coordinates are expressed.
+        char * units;                                    //!< Units in which the position coordinates are expressed.
 
         /**
          * @brief Synchronize the BufferView objects.

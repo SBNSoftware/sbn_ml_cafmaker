@@ -202,6 +202,8 @@ int main(int argc, char const * argv[])
     total_pot->Write();
     TH1D * total_events = (TH1D*)input_caf.Get("TotalEvents");
     total_events->Write();
+    TH1D * total_gen_events = (TH1D*)input_caf.Get("TotalGenEvents");
+    if(total_gen_events) total_gen_events->Write();
     output_tree->Write();
     TDirectoryFile * metadata = (TDirectoryFile *)input_caf.Get("metadata");
     copy_keyval_tree(&output_caf, metadata, "metatree");
