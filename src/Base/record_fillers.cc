@@ -8,6 +8,8 @@
  * called from either the standalone CAF generator or the merged CAF generator.
  * @author mueller@fnal.gov
  */
+#include <stdexcept>
+#include <string>
 #include <vector>
 #include <ctype.h>
 #include "H5Cpp.h"
@@ -31,6 +33,20 @@
 static std::string h5_string(const char * s)
 {
     return s ? std::string(s) : std::string();
+}
+
+/**
+ * @brief Check that the positions of a SPINE object are expressed in cm.
+ * @details The DLP StandardRecord classes do not store the units: all of
+ * their positions are in cm, which is what SPINE writes in production.
+ * @param units the units string read from the HDF5 file (may be null).
+ * @throw std::runtime_error if the units are anything other than cm.
+ */
+static void check_units(const char * units)
+{
+    std::string u(h5_string(units));
+    if(!u.empty() && u != "cm")
+        throw std::runtime_error("SPINE object positions are in '" + u + "', expected 'cm'.");
 }
 
 caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64_t offset)
@@ -61,7 +77,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.children_counts = std::vector<int64_t>(p.children_counts.begin(), p.children_counts.end());
     part.children_id = std::vector<int64_t>(p.children_id.begin(), p.children_id.end());
     part.creation_process = h5_string(p.creation_process);
-    part.crt_ids = std::vector<int64_t>(p.crt_ids.begin(), p.crt_ids.end());
+    part.crt_ids = std::vector<int>(p.crt_ids.begin(), p.crt_ids.end());
     part.crt_scores = std::vector<float>(p.crt_scores.begin(), p.crt_scores.end());
     part.crt_times = std::vector<float>(p.crt_times.begin(), p.crt_times.end());
 
@@ -97,7 +113,7 @@ caf::SRParticleTruthDLP fill_truth_particle(dlp::types::TruthParticle &p, uint64
     part.is_time_contained = p.is_time_contained;
     part.is_truth = p.is_truth;
     part.is_valid = p.is_valid;
-    part.units = h5_string(p.units);
+    check_units(p.units);
     part.ke = p.ke;
     std::copy(std::begin(p.last_step), std::end(p.last_step), std::begin(part.last_step));
     part.last_step_t = p.last_step_t;
@@ -169,7 +185,7 @@ caf::SRParticleDLP fill_particle(dlp::types::RecoParticle &p, uint64_t offset)
     std::copy(std::begin(p.csda_ke_per_pid), std::end(p.csda_ke_per_pid), std::begin(part.csda_ke_per_pid));
     part.depositions_q_sum = p.depositions_q_sum;
     part.depositions_sum = p.depositions_sum;
-    part.crt_ids = std::vector<int64_t>(p.crt_ids.begin(), p.crt_ids.end());
+    part.crt_ids = std::vector<int>(p.crt_ids.begin(), p.crt_ids.end());
     part.crt_scores = std::vector<float>(p.crt_scores.begin(), p.crt_scores.end());
     part.crt_times = std::vector<float>(p.crt_times.begin(), p.crt_times.end());
     part.directional_spread = p.directional_spread;
@@ -187,7 +203,7 @@ caf::SRParticleDLP fill_particle(dlp::types::RecoParticle &p, uint64_t offset)
     part.is_time_contained = p.is_time_contained;
     part.is_truth = p.is_truth;
     part.is_valid = p.is_valid;
-    part.units = h5_string(p.units);
+    check_units(p.units);
     part.ke = p.ke;
     part.length = p.length;
     part.mass = p.mass;
@@ -237,7 +253,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.bjorken_x = in.bjorken_x;
     ret.cathode_offset = in.cathode_offset;
     ret.creation_process = h5_string(in.creation_process);
-    ret.crt_ids = std::vector<int64_t>(in.crt_ids.begin(), in.crt_ids.end());
+    ret.crt_ids = std::vector<int>(in.crt_ids.begin(), in.crt_ids.end());
     ret.crt_scores = std::vector<float>(in.crt_scores.begin(), in.crt_scores.end());
     ret.crt_times = std::vector<float>(in.crt_times.begin(), in.crt_times.end());
 
@@ -252,7 +268,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.energy_init = in.energy_init;
     ret.energy_transfer = in.energy_transfer;
     ret.flash_hypo_pe = in.flash_hypo_pe;
-    ret.flash_hypothesis_ids = std::vector<int64_t>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
+    ret.flash_hypothesis_ids = std::vector<int>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
     ret.flash_ids = std::vector<int64_t>(in.flash_ids.begin(), in.flash_ids.end());
     ret.flash_scores = std::vector<float>(in.flash_scores.begin(), in.flash_scores.end());
     ret.flash_times = std::vector<float>(in.flash_times.begin(), in.flash_times.end());
@@ -263,7 +279,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.inelasticity = in.inelasticity;
     ret.interaction_id = in.interaction_id;
     ret.interaction_mode = (int64_t)in.interaction_mode;
-    ret.interaction_scheme = (int64_t)in.interaction_scheme;
+    ret.interaction_scheme = (int)in.interaction_scheme;
     ret.interaction_type = (int64_t)in.interaction_type;
     ret.is_cathode_crosser = in.is_cathode_crosser;
     ret.is_contained = in.is_contained;
@@ -305,7 +321,7 @@ caf::SRInteractionTruthDLP fill_truth_interaction(dlp::types::TruthInteraction &
     ret.theta = in.theta;
     ret.time = in.time;
     ret.topology = h5_string(in.topology);
-    ret.units = h5_string(in.units);
+    check_units(in.units);
     ret.track_id = in.track_id;
     std::copy(std::begin(in.vertex), std::end(in.vertex), std::begin(ret.vertex));
     for(int64_t id : ret.particle_ids)
@@ -334,7 +350,7 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     ret.best_match_id = in.best_match_id;
     ret.best_match_overlap = in.best_match_overlap;
     ret.cathode_offset = in.cathode_offset;
-    ret.crt_ids = std::vector<int64_t>(in.crt_ids.begin(), in.crt_ids.end());
+    ret.crt_ids = std::vector<int>(in.crt_ids.begin(), in.crt_ids.end());
     ret.crt_scores = std::vector<float>(in.crt_scores.begin(), in.crt_scores.end());
     ret.crt_times = std::vector<float>(in.crt_times.begin(), in.crt_times.end());
 
@@ -342,7 +358,7 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     ret.depositions_sum = in.depositions_sum;
     std::copy(std::begin(in.dir), std::end(in.dir), std::begin(ret.dir));
     ret.flash_hypo_pe = in.flash_hypo_pe;
-    ret.flash_hypothesis_ids = std::vector<int64_t>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
+    ret.flash_hypothesis_ids = std::vector<int>(in.flash_hypothesis_ids.begin(), in.flash_hypothesis_ids.end());
     ret.flash_ids = std::vector<int64_t>(in.flash_ids.begin(), in.flash_ids.end());
     ret.flash_scores = std::vector<float>(in.flash_scores.begin(), in.flash_scores.end());
     ret.flash_times = std::vector<float>(in.flash_times.begin(), in.flash_times.end());
@@ -368,7 +384,7 @@ caf::SRInteractionDLP fill_interaction(dlp::types::RecoInteraction &in, std::vec
     ret.primary_particle_ids = std::vector<int64_t>(in.primary_particle_ids.begin(), in.primary_particle_ids.end());
     ret.size = in.size;
     ret.topology = h5_string(in.topology);
-    ret.units = h5_string(in.units);
+    check_units(in.units);
     std::copy(std::begin(in.vertex), std::end(in.vertex), std::begin(ret.vertex));
     for(int64_t id : ret.particle_ids)
         ret.particles.push_back(particles.at(id));
